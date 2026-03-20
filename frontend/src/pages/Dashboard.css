@@ -1,0 +1,215 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+.dashboard__main {
+  padding: 1.5rem 2rem;
+  overflow-x: hidden;
+  grid-column: 2;
+  grid-row: 1;
+  background: var(--bg-primary);
+}
+
+.dashboard > .footer {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.dashboard__section {
+  max-width: 900px;
+}
+
+.dashboard__heading {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-primary);
+}
+
+.dashboard__subheading {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.dashboard__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard__cards--prominent {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: 1.5rem;
+}
+
+.dashboard__cards--prominent .stat-card {
+  background: linear-gradient(135deg, var(--bg-card) 40%, rgba(20, 110, 245, 0.15) 100%);
+  border: 1px solid rgba(20, 110, 245, 0.3);
+  padding: 1.5rem;
+}
+
+.dashboard__cards--prominent .stat-card__value {
+  font-size: 2.25rem;
+  font-family: var(--font-title);
+  color: #ffffff;
+}
+
+.dashboard__description {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.dashboard__lang {
+  margin-top: 1rem;
+}
+
+.lang-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.lang-bar__segment {
+  transition: width var(--transition);
+}
+
+.lang-bar__labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.lang-bar__label {
+  white-space: nowrap;
+}
+
+.dashboard__chart-wrap {
+  background: rgba(28, 33, 40, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard__chart-wrap--radar {
+  margin-top: 1rem;
+}
+
+.dashboard__charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.dashboard__readme-score {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.readme-total {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--accent);
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.readme-total__value {
+  line-height: 1;
+}
+
+.readme-total__label {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.readme-checklist {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.readme-checklist li {
+  font-size: 0.9rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
+.readme-checklist--yes {
+  color: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+.readme-checklist--no {
+  color: var(--text-secondary);
+}
+
+.dashboard__issue-stats {
+  margin-bottom: 1rem;
+  max-width: 280px;
+}
+
+.dashboard__empty {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  padding: 1rem 0;
+}
+
+.dashboard__ai-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 1200px;
+}
+
+.dashboard__ai-card {
+  background: rgba(28, 33, 40, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.dashboard__ai-chat {
+  min-height: 500px;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  .dashboard__main {
+    padding: 1rem;
+  }
+  .dashboard__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard__charts-row {
+    grid-template-columns: 1fr;
+  }
+  .dashboard__ai-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.dashboard__suggestions { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); } .suggestion-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; } .suggestion-item { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; color: var(--text-primary); font-size: 0.95rem; line-height: 1.5; display: flex; align-items: flex-start; gap: 0.75rem; transition: transform 0.2s; } .suggestion-item:hover { transform: translateX(4px); border-color: var(--accent); } .suggestion-bullet { font-size: 1.2rem; margin-top: -2px; }

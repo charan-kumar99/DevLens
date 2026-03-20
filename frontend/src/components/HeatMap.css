@@ -1,0 +1,92 @@
+.heatmap {
+  background: rgba(28, 33, 40, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.heatmap__title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.heatmap__svg {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.heatmap__cell {
+  transition: opacity var(--transition);
+  cursor: pointer;
+}
+
+.heatmap__cell:hover {
+  opacity: 0.85;
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.heatmap--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.heatmap__empty {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.heatmap__tooltip {
+  background: rgba(28, 33, 40, 0.95);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  max-width: 350px;
+}
+
+.heatmap__tooltip-date {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.heatmap__tooltip-count {
+  color: var(--accent);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.heatmap__tooltip-messages {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  white-space: normal;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.heatmap__tooltip-message {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  padding-left: 4px;
+}
+
+.heatmap__tooltip-more {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-style: italic;
+  margin-top: 4px;
+  opacity: 0.7;
+}

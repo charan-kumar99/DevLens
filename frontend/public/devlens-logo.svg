@@ -1,0 +1,82 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#58a6ff"/>
+      <stop offset="100%" stop-color="#bc8cff"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bc8cff"/>
+      <stop offset="100%" stop-color="#58a6ff"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#bc8cff" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#58a6ff"/>
+      <stop offset="50%" stop-color="#8a7fff"/>
+      <stop offset="100%" stop-color="#bc8cff"/>
+    </linearGradient>
+    <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="88" fill="none" stroke="url(#g4)" stroke-width="1.5" stroke-opacity="0.35"/>
+
+  <!-- Aperture blades -->
+  <g opacity="0.18">
+    <ellipse cx="100" cy="100" rx="52" ry="18" fill="url(#g1)" transform="rotate(0 100 100)"/>
+    <ellipse cx="100" cy="100" rx="52" ry="18" fill="url(#g2)" transform="rotate(60 100 100)"/>
+    <ellipse cx="100" cy="100" rx="52" ry="18" fill="url(#g1)" transform="rotate(120 100 100)"/>
+  </g>
+
+  <!-- Lens outer ring -->
+  <circle cx="100" cy="100" r="60" fill="url(#g3)" stroke="url(#g4)" stroke-width="2.5"/>
+
+  <!-- Inner lens ring -->
+  <circle cx="100" cy="100" r="44" fill="none" stroke="url(#g4)" stroke-width="1" stroke-opacity="0.5"/>
+
+  <!-- Lens center ring -->
+  <circle cx="100" cy="100" r="28" fill="none" stroke="url(#g4)" stroke-width="1.5" stroke-opacity="0.7"/>
+
+  <!-- Inner core fill -->
+  <circle cx="100" cy="100" r="27" fill="url(#g1)" fill-opacity="0.12"/>
+
+  <!-- Code bracket LEFT: < -->
+  <path d="M83 88 L72 100 L83 112" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Code bracket RIGHT: > -->
+  <path d="M117 88 L128 100 L117 112" fill="none" stroke="url(#g2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Analytics bar chart (green accent) -->
+  <rect x="91" y="97" width="3.5" height="6" rx="1" fill="#3fb950"/>
+  <rect x="96.5" y="94" width="3.5" height="9" rx="1" fill="#3fb950" opacity="0.75"/>
+  <rect x="102" y="91" width="3.5" height="12" rx="1" fill="#3fb950"/>
+  <rect x="107.5" y="95" width="3.5" height="8" rx="1" fill="#3fb950" opacity="0.75"/>
+
+  <!-- Aperture tick marks (6 ticks) -->
+  <g stroke="url(#g4)" stroke-width="1.5" stroke-linecap="round" opacity="0.6">
+    <line x1="100" y1="36" x2="100" y2="42"/>
+    <line x1="152" y1="68" x2="146.8" y2="71"/>
+    <line x1="152" y1="132" x2="146.8" y2="129"/>
+    <line x1="100" y1="164" x2="100" y2="158"/>
+    <line x1="48" y1="132" x2="53.2" y2="129"/>
+    <line x1="48" y1="68" x2="53.2" y2="71"/>
+  </g>
+
+  <!-- Top-right accent dots -->
+  <circle cx="148" cy="52" r="2.5" fill="#58a6ff" opacity="0.7"/>
+  <circle cx="156" cy="46" r="1.5" fill="#bc8cff" opacity="0.5"/>
+  <circle cx="141" cy="45" r="1.5" fill="#58a6ff" opacity="0.4"/>
+
+  <!-- Bottom-left accent dots -->
+  <circle cx="52" cy="148" r="2.5" fill="#bc8cff" opacity="0.7"/>
+  <circle cx="44" cy="154" r="1.5" fill="#58a6ff" opacity="0.5"/>
+  <circle cx="59" cy="155" r="1.5" fill="#bc8cff" opacity="0.4"/>
+
+  <!-- Lens surface highlight arc -->
+  <path d="M68 78 A38 38 0 0 1 132 78" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.12" stroke-linecap="round"/>
+</svg>

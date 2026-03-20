@@ -1,0 +1,65 @@
+.skeleton {
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.skeleton__line {
+  height: 1rem;
+  background: var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton__line:last-child {
+  margin-bottom: 0;
+}
+
+.skeleton-card {
+  background: rgba(28, 33, 40, 0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-card__line {
+  height: 1rem;
+  background: var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-card__line:last-child {
+  margin-bottom: 0;
+}
+
+.skeleton-card__line--short {
+  width: 40%;
+}
+
+.skeleton-card__line--long {
+  width: 85%;
+}
+
+.skeleton-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 120px;
+  padding: 1rem;
+  background: rgba(28, 33, 40, 0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-chart__bar {
+  flex: 1;
+  max-width: 40px;
+  background: var(--border);
+  border-radius: 4px 4px 0 0;
+}
