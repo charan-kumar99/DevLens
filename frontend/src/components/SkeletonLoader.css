@@ -1,65 +1,152 @@
-.skeleton {
-  animation: skeletonPulse 1.5s ease-in-out infinite;
-}
+/* ═══════════════════════════════════
+   DevLens — Skeleton Loader
+   ═══════════════════════════════════ */
 
-@keyframes skeletonPulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-.skeleton__line {
-  height: 1rem;
-  background: var(--border);
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
-}
-
-.skeleton__line:last-child {
-  margin-bottom: 0;
-}
-
+/* ─── Base Skeleton ─── */
 .skeleton-card {
-  background: rgba(28, 33, 40, 0.7);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.25rem;
-  animation: skeletonPulse 1.5s ease-in-out infinite;
+  background: var(--bg-high);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  overflow: hidden;
 }
 
-.skeleton-card__line {
-  height: 1rem;
-  background: var(--border);
-  border-radius: 4px;
-  margin-bottom: 0.75rem;
+.skeleton-line {
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--bg-high) 25%,
+    var(--bg-bright) 50%,
+    var(--bg-high) 75%
+  );
+  background-size: 300% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  margin-bottom: var(--space-3);
 }
 
-.skeleton-card__line:last-child {
-  margin-bottom: 0;
+.skeleton-line--short  { width: 60%; }
+.skeleton-line--medium { width: 80%; }
+.skeleton-line--long   { width: 100%; }
+.skeleton-line--value  { width: 40%; height: 28px; margin-bottom: var(--space-2); }
+.skeleton-line--label  { width: 55%; height: 10px; }
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
-.skeleton-card__line--short {
-  width: 40%;
-}
-
-.skeleton-card__line--long {
-  width: 85%;
-}
-
+/* ─── Skeleton Chart ─── */
 .skeleton-chart {
+  background: var(--bg-high);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  overflow: hidden;
+}
+
+.skeleton-chart-bars {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  height: 120px;
-  padding: 1rem;
-  background: rgba(28, 33, 40, 0.7);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  animation: skeletonPulse 1.5s ease-in-out infinite;
+  gap: var(--space-3);
+  height: 180px;
+  margin-top: var(--space-4);
 }
 
-.skeleton-chart__bar {
+.skeleton-chart-bar {
   flex: 1;
-  max-width: 40px;
-  background: var(--border);
-  border-radius: 4px 4px 0 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: linear-gradient(
+    90deg,
+    var(--bg-high) 25%,
+    var(--bg-bright) 50%,
+    var(--bg-high) 75%
+  );
+  background-size: 300% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.skeleton-chart-bar:nth-child(1) { height: 40%; animation-delay: 0ms; }
+.skeleton-chart-bar:nth-child(2) { height: 75%; animation-delay: 80ms; }
+.skeleton-chart-bar:nth-child(3) { height: 55%; animation-delay: 160ms; }
+.skeleton-chart-bar:nth-child(4) { height: 90%; animation-delay: 240ms; }
+.skeleton-chart-bar:nth-child(5) { height: 65%; animation-delay: 320ms; }
+.skeleton-chart-bar:nth-child(6) { height: 80%; animation-delay: 400ms; }
+.skeleton-chart-bar:nth-child(7) { height: 45%; animation-delay: 480ms; }
+
+/* ─── Skeleton Grid (for stat cards) ─── */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+/* ─── Skeleton Header ─── */
+.skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    var(--bg-high) 25%,
+    var(--bg-bright) 50%,
+    var(--bg-high) 75%
+  );
+  background-size: 300% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ─── Loading Analysis State ─── */
+.skeleton-analysis {
+  text-align: center;
+  padding: var(--space-12) var(--space-8);
+}
+
+.skeleton-analysis__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+  margin: 0 auto var(--space-6);
+}
+
+.skeleton-analysis__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.02em;
+}
+
+.skeleton-analysis__sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.skeleton-analysis__progress {
+  width: 200px;
+  height: 2px;
+  background: var(--bg-high);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: var(--space-5) auto 0;
+}
+
+.skeleton-analysis__bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--ai-accent));
+  border-radius: var(--radius-full);
+  width: 60%;
+  animation: loading-progress 2s ease-in-out infinite;
 }

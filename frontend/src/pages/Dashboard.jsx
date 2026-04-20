@@ -29,6 +29,29 @@ import './Dashboard.css';
 
 const SECTION_IDS = ['overview', 'commits', 'contributors', 'readme', 'issues', 'ai', 'risks', 'readme-gen'];
 
+const CHART_TOOLTIP_STYLE = {
+  background: 'var(--bg-highest)',
+  border: '1px solid var(--border)',
+  borderTop: '2px solid var(--accent)',
+  borderRadius: '8px',
+  padding: '8px 12px',
+  boxShadow: 'var(--shadow-card)',
+  fontFamily: 'var(--font-mono)',
+  fontSize: '12px',
+};
+
+const CHART_LABEL_STYLE = {
+  color: 'var(--text-primary)',
+  fontWeight: '600',
+  marginBottom: '4px',
+  fontFamily: 'var(--font-display)',
+};
+
+const CHART_ITEM_STYLE = {
+  color: 'var(--accent)',
+};
+
+
 export default function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -78,6 +101,24 @@ export default function Dashboard() {
       <main className="dashboard__main">
         {section === 'overview' && (
           <section className="dashboard__section" aria-labelledby="overview-title">
+            {/* Repo Header Row */}
+            <div className="dashboard__repo-header">
+              <span className="dashboard__repo-name">{repoLabel}</span>
+              <div className="dashboard__repo-badges">
+                <span className="badge badge--active">
+                  <span className="status-dot status-dot--pulse" aria-hidden="true" />
+                  Active
+                </span>
+                {result.license && (
+                  <span className="badge badge--blue">{result.license}</span>
+                )}
+                {Object.keys(result.languages || {})[0] && (
+                  <span className="badge badge--blue">{Object.keys(result.languages)[0]}</span>
+                )}
+              </div>
+              <span className="dashboard__timestamp">Results from latest analysis</span>
+            </div>
+
             <h2 id="overview-title" className="dashboard__heading">Overview</h2>
             <div className="dashboard__cards dashboard__cards--prominent">
               <StatCard label="Overall Score" value={`${result.overallScore ?? 0}/100`} icon="🎯" />
@@ -142,15 +183,9 @@ export default function Dashboard() {
                   <XAxis dataKey="login" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
                   <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
                   <Tooltip
-                    contentStyle={{
-                      background: 'rgba(28, 33, 40, 0.95)',
-                      border: '1px solid var(--accent)',
-                      borderRadius: '8px',
-                      padding: '8px 12px',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
-                    }}
-                    labelStyle={{ color: 'var(--text-primary)', fontWeight: '600', marginBottom: '4px' }}
-                    itemStyle={{ color: 'var(--accent)' }}
+                    contentStyle={CHART_TOOLTIP_STYLE}
+                    labelStyle={CHART_LABEL_STYLE}
+                    itemStyle={CHART_ITEM_STYLE}
                     cursor={false}
                   />
                   <Bar dataKey="commits" fill="var(--accent)" radius={[4, 4, 0, 0]} cursor="default" />
@@ -250,14 +285,9 @@ export default function Dashboard() {
                         ))}
                       </Pie>
                       <Tooltip
-                        contentStyle={{
-                          background: 'rgba(28, 33, 40, 0.95)',
-                          border: '1px solid var(--accent)',
-                          borderRadius: '8px',
-                          padding: '8px 12px',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
-                        }}
-                        itemStyle={{ color: 'var(--accent)' }}
+                        contentStyle={CHART_TOOLTIP_STYLE}
+                        labelStyle={CHART_LABEL_STYLE}
+                        itemStyle={CHART_ITEM_STYLE}
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -277,14 +307,9 @@ export default function Dashboard() {
                       ))}
                     </Bar>
                     <Tooltip
-                      contentStyle={{
-                        background: 'rgba(28, 33, 40, 0.95)',
-                        border: '1px solid var(--accent)',
-                        borderRadius: '8px',
-                        padding: '8px 12px',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
-                      }}
-                      itemStyle={{ color: 'var(--accent)' }}
+                      contentStyle={CHART_TOOLTIP_STYLE}
+                      labelStyle={CHART_LABEL_STYLE}
+                      itemStyle={CHART_ITEM_STYLE}
                       cursor={false}
                     />
                   </BarChart>
@@ -296,7 +321,10 @@ export default function Dashboard() {
 
         {section === 'ai' && (
           <section className="dashboard__section" aria-labelledby="ai-title">
-            <h2 id="ai-title" className="dashboard__heading">AI Summary</h2>
+            <h2 id="ai-title" className="dashboard__heading">
+              AI Summary
+              <span className="badge badge--ai" aria-label="AI powered section">AI Powered</span>
+            </h2>
             <AIInsightCard
               owner={result.owner}
               repo={result.repo}
@@ -309,8 +337,8 @@ export default function Dashboard() {
                 <h3 className="dashboard__subheading">Ways to improve this project</h3>
                 <ul className="suggestion-list">
                   {result.suggestions.map((s, i) => (
-                    <li key={i} className="suggestion-item">
-                      <span className="suggestion-bullet">💡</span>
+                    <li key={i} className="suggestion-item stagger-child">
+                      <span className="suggestion-number" aria-hidden="true">{i + 1}</span>
                       {s}
                     </li>
                   ))}
@@ -321,10 +349,13 @@ export default function Dashboard() {
         )}
         {section === 'risks' && (
           <section className="dashboard__section" aria-labelledby="risks-title">
-            <h2 id="risks-title" className="dashboard__heading">AI Code Risk Detection</h2>
+            <h2 id="risks-title" className="dashboard__heading">
+              Code Risk Detection
+              <span className="badge badge--ai" aria-label="AI powered section">AI Powered</span>
+            </h2>
             <p className="dashboard__description">
-              Our AI analyzes repository metadata to identify potential bad practices, 
-              scalability bottlenecks, and maintainability risks.
+              AI analyzes repository metadata to identify potential bad practices,
+              security concerns, scalability bottlenecks, and maintainability risks.
             </p>
             <CodeRiskCard risks={result.risks} />
           </section>

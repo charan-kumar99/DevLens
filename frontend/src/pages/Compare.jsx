@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { compareRepos } from '../utils/api';
 import StatCard from '../components/StatCard';
 import { formatDate } from '../utils/formatters';
@@ -43,9 +44,10 @@ export default function Compare() {
 
   return (
     <div className="compare home">
-      {loading ? (
-        <CompareSkeletonLoader />
-      ) : (
+      <main className="compare__main">
+        {loading ? (
+          <CompareSkeletonLoader />
+        ) : (
         <>
           <header className="compare__header">
             <Link to="/dashboard" state={{ result: previousResult }} className="compare__back">
@@ -95,17 +97,11 @@ export default function Compare() {
                   <div className="verdict__header">
                     <span className="verdict__badge">AI Smart Verdict</span>
                   </div>
-          <p className="compare__description" 
-             dangerouslySetInnerHTML={{ 
-               __html: (data.aiVerdict || '')
-                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                 .replace(/</g, '&lt;')
-                 .replace(/>/g, '&gt;')
-                 .replace(/&lt;strong&gt;/g, '<strong>')
-                 .replace(/&lt;\/strong&gt;/g, '</strong>')
-                 .replace(/\n\n/g, '<br/><br/>') 
-             }} 
-          />
+                  <div className="compare__description md-content">
+                    <ReactMarkdown>
+                      {data.aiVerdict || ''}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               )}
               <div className="compare__grid">
@@ -144,6 +140,7 @@ export default function Compare() {
           )}
         </>
       )}
+      </main>
       <Footer />
     </div>
   );

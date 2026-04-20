@@ -1,0 +1,16 @@
+/* ═══════════════════════════════════════
+   AnimatedShaderBackground
+   ═══════════════════════════════════════ */
+.shader-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* The THREE.js renderer injects a canvas — make it fill the container */
+.shader-bg canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

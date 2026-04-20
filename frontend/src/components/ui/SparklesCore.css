@@ -1,0 +1,23 @@
+/* ═══════════════════════════════════
+   SparklesCore — particle canvas wrapper
+   ═══════════════════════════════════ */
+
+/* Root wrapper — framer-motion animates opacity on this */
+.sparkles-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* The tsParticles canvas container */
+.sparkles-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure the tsParticles canvas itself fills the container */
+.sparkles-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

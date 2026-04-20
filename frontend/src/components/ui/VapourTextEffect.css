@@ -1,0 +1,23 @@
+/* ═══════════════ VapourTextEffect ═══════════════ */
+
+.vapour-text-effect__wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  overflow: visible;
+}
+
+.vapour-text-container {
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.vapour-text-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}

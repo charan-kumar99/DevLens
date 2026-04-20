@@ -1,15 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { askSupport } from '../utils/api';
-import { renderMarkdown } from '../utils/markdown';
+import ReactMarkdown from 'react-markdown';
 import './GlobalAIChat.css';
 
-const SUGGESTED_QUESTIONS = [
+const ALL_QUESTIONS = [
   'What does the Overall Score mean?',
   'What does "Potentially abandoned" mean?',
   'How do I export a report?',
   'What is the README Score?',
+  'Can I compare two repositories?',
+  'How does the AI verdict work?',
+  'What languages are supported?',
+  'How do you calculate code risk?',
+  'Can I search for trending repos?',
+  'What does a high fork count indicate?',
+  'How can I improve my repository?',
+  'How is the activity status determined?'
 ];
+
+function getRandomQuestions(pool, count) {
+  const shuffled = [...pool].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
 
 const WELCOME_MESSAGE = {
   id: 'welcome',
@@ -21,6 +34,7 @@ export default function GlobalAIChat() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([WELCOME_MESSAGE]);
+  const [suggestedQuestions, setSuggestedQuestions] = useState(() => getRandomQuestions(ALL_QUESTIONS, 4));
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -74,6 +88,7 @@ export default function GlobalAIChat() {
     e.stopPropagation();
     setMessages([WELCOME_MESSAGE]);
     setInput('');
+    setSuggestedQuestions(getRandomQuestions(ALL_QUESTIONS, 4));
   };
 
   const handleSubmit = (e) => {
@@ -140,7 +155,11 @@ export default function GlobalAIChat() {
                   <span className="global-ai-msg-avatar">🤖</span>
                 )}
                 <div className={`global-ai-bubble global-ai-bubble--${msg.type}`}>
-                  {renderMarkdown(msg.text)}
+                  {msg.type === 'bot' ? (
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  ) : (
+                    msg.text
+                  )}
                 </div>
               </div>
             ))}
@@ -162,7 +181,7 @@ export default function GlobalAIChat() {
             <div className="global-ai-suggestions">
               <p className="global-ai-suggestions-label">Try asking:</p>
               <div className="global-ai-suggestions-grid">
-                {SUGGESTED_QUESTIONS.map((q) => (
+                {suggestedQuestions.map((q) => (
                   <button
                     key={q}
                     className="global-ai-chip"

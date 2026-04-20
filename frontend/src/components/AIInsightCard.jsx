@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { regenerateSummary } from '../utils/api';
-import { renderParagraphs } from '../utils/markdown';
+import ReactMarkdown from 'react-markdown';
 import './AIInsightCard.css';
 
 export default function AIInsightCard({ owner, repo, summary, onUpdate }) {
@@ -21,30 +21,40 @@ export default function AIInsightCard({ owner, repo, summary, onUpdate }) {
   };
 
   return (
-    <div className="ai-insight">
+    <div className="ai-insight" role="region" aria-label="AI Repository Analysis">
       <div className="ai-insight__header">
-        <h3 className="ai-insight__title">AI architectural summary</h3>
-        <button
-          type="button"
-          className="ai-insight__btn"
-          onClick={handleRegenerate}
-          disabled={loading}
-        >
-          {loading ? 'Regenerating…' : 'Regenerate'}
-        </button>
+        <span className="ai-insight__pulse" aria-hidden="true" />
+        <h3 className="ai-insight__title">Repository Intelligence Report</h3>
       </div>
+
       <div className="ai-insight__content">
         {summary ? (
-          renderParagraphs(summary, 'ai-insight__text')
+          <ReactMarkdown className="ai-insight__markdown">{summary}</ReactMarkdown>
         ) : (
-          <p className="ai-insight__empty">No summary available.</p>
+          <p className="ai-insight__empty">
+            No summary available yet. Click Regenerate to generate an AI analysis.
+          </p>
         )}
       </div>
+
       {error && (
         <div className="ai-insight__error" role="alert">
           {error}
         </div>
       )}
+
+      <div className="ai-insight__actions">
+        <button
+          type="button"
+          className={`ai-insight__btn ${loading ? 'ai-insight__btn--loading' : ''}`}
+          onClick={handleRegenerate}
+          disabled={loading}
+          aria-label="Regenerate AI analysis"
+          id="regenerate-ai-btn"
+        >
+          {loading ? 'Regenerating…' : '↺ Regenerate Analysis'}
+        </button>
+      </div>
     </div>
   );
 }

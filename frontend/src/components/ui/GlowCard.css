@@ -1,0 +1,39 @@
+/* ═══════════════════════════════════════════════
+   GlowCard — layout classes (replaces Tailwind)
+   ═══════════════════════════════════════════════ */
+
+/* Base card */
+.glow-card {
+  border-radius: calc(var(--radius, 14) * 1px);
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 8, 20, 0.85); /* Solidified background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1rem 2rem -1rem black;
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Soft border edge */
+}
+
+/* Inner glow node */
+.glow-card__inner {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ── Size variants (replace Tailwind w-* h-* classes) ── */
+.glow-card--sm {
+  width: 12rem;
+  aspect-ratio: 3 / 4;
+}
+.glow-card--md {
+  width: 16rem;
+  aspect-ratio: 3 / 4;
+}
+.glow-card--lg {
+  width: 20rem;
+  aspect-ratio: 3 / 4;
+}

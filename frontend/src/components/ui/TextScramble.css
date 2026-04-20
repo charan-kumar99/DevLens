@@ -1,0 +1,155 @@
+/* ═══════════════════════════════════
+   TextScramble — Kinetic Typography
+   Matches DevLens Neural Obsidian system
+   ═══════════════════════════════════ */
+
+/* ─── Root wrapper ─── */
+.text-scramble {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  cursor: pointer;
+  user-select: none;
+  /* no padding — glow pseudo-element handles breathing room */
+}
+
+/* ─── Background glow (behind everything) ─── */
+.text-scramble__glow {
+  position: absolute;
+  inset: -16px;             /* -4 * 4px spacing unit */
+  border-radius: 10px;
+  background: rgba(79, 158, 255, 0.05); /* --accent at 5% */
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.text-scramble:hover .text-scramble__glow {
+  opacity: 1;
+}
+
+/* ─── The monospace character row ─── */
+.text-scramble__text {
+  position: relative;
+  font-family: var(--font-mono);          /* JetBrains Mono */
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+  display: inline-block;                  /* shrink-wraps to text */
+}
+
+/* ─── Individual character spans ─── */
+.text-scramble__char {
+  display: inline-block;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+/* Characters being scrambled → accent color + slight scale-up */
+.text-scramble__char--scrambling {
+  color: var(--accent);         /* #4f9eff */
+  transform: scale(1.12) translateY(-1px);
+}
+
+/* Revealed / normal characters */
+.text-scramble__char--normal {
+  color: var(--text-primary);   /* #dfe2eb */
+  transform: scale(1) translateY(0);
+}
+
+/* ─── Animated underline ─── */
+.text-scramble__underline {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+/* Base (always-visible faint line) */
+.text-scramble__underline-base {
+  position: absolute;
+  inset: 0;
+  background: var(--border-subtle);   /* rgba(65,71,82,0.4) */
+}
+
+/* Animated fill line — slides in from left on hover */
+.text-scramble__underline-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--text-primary);    /* #dfe2eb */
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.text-scramble:hover .text-scramble__underline-fill {
+  transform: scaleX(1);
+}
+
+/* ─── Size variants ─── */
+.text-scramble--sm .text-scramble__text {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.text-scramble--lg .text-scramble__text {
+  font-size: 1.35rem;
+  letter-spacing: 0.22em;
+}
+
+.text-scramble--xl .text-scramble__text {
+  font-size: 1.75rem;
+  letter-spacing: 0.25em;
+}
+
+/* ─── Color variants ─── */
+/* AI/purple variant — for AI-related CTAs */
+.text-scramble--ai .text-scramble__char--scrambling {
+  color: var(--ai-accent);     /* #a78bfa */
+}
+
+.text-scramble--ai:hover .text-scramble__underline-fill {
+  background: var(--ai-accent);
+}
+
+.text-scramble--ai .text-scramble__glow {
+  background: rgba(167, 139, 250, 0.06);
+}
+
+/* Accent/blue variant (default — same as --accent) */
+.text-scramble--accent .text-scramble__char--scrambling {
+  color: var(--accent);
+}
+
+/* Muted variant */
+.text-scramble--muted .text-scramble__char--normal {
+  color: var(--text-muted);
+}
+
+.text-scramble--muted:hover .text-scramble__char--normal {
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+/* ─── No underline modifier ─── */
+.text-scramble--no-underline .text-scramble__underline {
+  display: none;
+}
+
+/* ─── Accessible: reduce motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .text-scramble__char {
+    transition: none;
+  }
+
+  .text-scramble__underline-fill {
+    transition: none;
+  }
+
+  .text-scramble__glow {
+    transition: none;
+  }
+}

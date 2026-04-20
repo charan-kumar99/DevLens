@@ -151,9 +151,15 @@ Q: ""What's the overall score?""
 A: ""It's a 0-100 rating of repository quality based on documentation, recent activity, issue management, and community engagement.""";
 
         var contents = new List<object>();
+        string lastRole = "";
 
         foreach (var msg in history ?? new())
-            contents.Add(new { role = msg.Role == "bot" ? "model" : "user", parts = new[] { new { text = msg.Content } } });
+        {
+            var currentRole = msg.Role == "bot" ? "model" : "user";
+            if (currentRole == lastRole) continue;
+            contents.Add(new { role = currentRole, parts = new[] { new { text = msg.Content } } });
+            lastRole = currentRole;
+        }
 
         contents.Add(new { role = "user", parts = new[] { new { text = question } } });
 
@@ -331,6 +337,13 @@ Task: Provide a comprehensive comparison analysis in 2-3 well-structured paragra
    - Which repository is better for production use
    - Which is better for learning/contribution
    - Any specific scenarios where one excels over the other
+
+IMPORTANT FORMATTING INSTRUCTIONS:
+- Use **bold** (double asterisks) to highlight key points, repository names, important metrics, and conclusions
+- Use *italic* (single asterisks) for emphasis on technical terms or specific features
+- Highlight critical numbers and scores in bold
+- Make your verdict statement bold for clarity
+- Example: **Repository A** shows *superior performance* with **85/100 score**
 
 Write in a professional, objective tone. Use specific metrics to support your analysis. Be decisive but fair.";
         
@@ -543,33 +556,43 @@ Output ONLY the JSON:";
     {
         if (string.IsNullOrWhiteSpace(_apiKey)) return null;
 
-        object request = string.IsNullOrWhiteSpace(systemContext)
-            ? new { contents, generationConfig = new { temperature = temp, maxOutputTokens = maxTokens } }
-            : new { systemInstruction = new { parts = new[] { new { text = systemContext } } }, contents, generationConfig = new { temperature = temp, maxOutputTokens = maxTokens } };
+        var requestBody = new Dictionary<string, object>
+        {
+            { "contents", contents },
+            { "generation_config", new { temperature = temp, max_output_tokens = maxTokens } }
+        };
+
+        if (!string.IsNullOrWhiteSpace(systemContext))
+        {
+            requestBody["system_instruction"] = new { parts = new[] { new { text = systemContext } } };
+        }
+
         var models = new[]
         {
-            "gemini-flash-latest",
-            "gemini-pro-latest",
-            "gemini-2.5-flash",
-            "gemini-2.5-pro",
-            "gemini-2.0-flash",
+            "gemini-1.5-flash",
+            "gemini-pro"
         };
+
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
 
         foreach (var model in models)
         {
             try
             {
-                var path = $"v1beta/models/{model}:generateContent?key={_apiKey}";
-                var response = await _http.PostAsJsonAsync(path, request, ct);
+                var path = $"v1/models/{model}:generateContent?key={_apiKey}";
+                var response = await _http.PostAsJsonAsync(path, requestBody, options, ct);
+                
                 if (!response.IsSuccessStatusCode)
                 {
                     var err = await response.Content.ReadAsStringAsync(ct);
-                    Console.Error.WriteLine($"Gemini API Error ({model}): {response.StatusCode} - {err}");
+                    var statusCode = (int)response.StatusCode;
                     
-                    if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                    {
-                        break; // Stop trying other models to avoid further API bans
-                    }
+                    // Explicitly log the error to our log file for debugging
+                    try {
+                        System.IO.File.AppendAllText("backend.log", $"\n[Gemini Error] Model: {model}, Status: {statusCode}, Error: {err}\n");
+                    } catch {}
+
+                    if (statusCode == 429) break;
                     continue;
                 }
 

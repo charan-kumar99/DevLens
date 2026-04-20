@@ -1,93 +1,191 @@
-.risk-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.25rem;
-}
+/* ═══════════════════════════════════
+   DevLens — Code Risk Card
+   ═══════════════════════════════════ */
 
-.risk-item {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  transition: transform var(--transition), border-color var(--transition);
+/* ─── Container / Grid ─── */
+.risk-grid {
   display: flex;
   flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ─── Risk Item Card ─── */
+.risk-item {
+  background: var(--bg-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+  animation: stagger-in 0.35s both;
+}
+
+/* Left severity bar */
+.risk-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--risk-color, var(--border));
+  transition: width var(--transition);
 }
 
 .risk-item:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent);
+  background: var(--bg-high);
+  transform: translateX(4px);
+  border-color: rgba(65, 71, 82, 0.6);
 }
 
+/* Severity-specific left border colors */
+.risk-item[data-severity="critical"] { --risk-color: var(--danger); }
+.risk-item[data-severity="high"]     { --risk-color: var(--danger); }
+.risk-item[data-severity="medium"]   { --risk-color: var(--warning); }
+.risk-item[data-severity="low"]      { --risk-color: var(--text-muted); }
+
+/* Danger card hover glow */
+.risk-item[data-severity="critical"]:hover,
+.risk-item[data-severity="high"]:hover {
+  border-color: var(--danger-border);
+  box-shadow: -2px 0 12px rgba(248, 81, 73, 0.15);
+}
+
+.risk-item[data-severity="medium"]:hover {
+  border-color: rgba(210, 153, 34, 0.3);
+  box-shadow: -2px 0 12px rgba(210, 153, 34, 0.12);
+}
+
+/* ─── Header Row ─── */
 .risk-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
 }
 
 .risk-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
   line-height: 1.3;
 }
 
+/* ─── Severity Badge ─── */
 .risk-badge {
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.6rem;
   font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
+.risk-badge--critical,
 .risk-badge--high {
-  background: rgba(248, 81, 73, 0.15);
-  color: #ff7b72;
-  border: 1px solid rgba(248, 81, 73, 0.4);
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
 }
 
 .risk-badge--medium {
-  background: rgba(210, 153, 34, 0.15);
-  color: #d29922;
-  border: 1px solid rgba(210, 153, 34, 0.4);
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1px solid rgba(210, 153, 34, 0.25);
 }
 
 .risk-badge--low {
-  background: rgba(63, 185, 80, 0.15);
-  color: #7ee787;
-  border: 1px solid rgba(63, 185, 80, 0.4);
+  background: var(--bg-highest);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
 }
 
+/* ─── Meta Row ─── */
 .risk-meta {
-  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 .risk-category {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--bg-highest);
+  border-radius: var(--radius-full);
+  padding: 1px var(--space-2);
+  border: 1px solid var(--border-subtle);
 }
 
+/* ─── Description ─── */
 .risk-description {
+  font-size: 0.865rem;
+  line-height: 1.65;
+  color: var(--text-muted);
   margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  flex-grow: 1;
 }
 
+/* ─── Empty State ─── */
 .risk-card--empty {
+  background: var(--bg-low);
+  border: 1px solid var(--border-subtle);
+  border-left: 2px solid var(--success);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
   text-align: center;
-  padding: 3rem;
-  background: var(--bg-card);
-  border: 2px dashed var(--border);
-  border-radius: var(--radius);
-  color: var(--text-secondary);
+  animation: stagger-in 0.4s both;
 }
+
+.risk-card--empty p {
+  color: var(--success);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ─── Risk Summary Bar (optional) ─── */
+.risk-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.risk-summary__item {
+  background: var(--bg-high);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+}
+
+.risk-summary__count {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+
+.risk-summary__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.risk-summary__item--critical .risk-summary__count { color: var(--danger); }
+.risk-summary__item--medium .risk-summary__count   { color: var(--warning); }
+.risk-summary__item--low .risk-summary__count      { color: var(--text-muted); }
