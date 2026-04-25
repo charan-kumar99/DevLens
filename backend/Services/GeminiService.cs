@@ -634,11 +634,7 @@ Output ONLY the JSON:";
         }
         
         // ALL APIs FAILED (Likely rate limited or expired keys). 
-        return @"To successfully improve your repository's health metrics, try focusing on these key areas:
-- **Comprehensive README:** Include installation steps, usage snippets, and visual screenshots.
-- **Consistent Activity:** Make frequent, smaller commits rather than massive infrequent dumps.
-- **Issue Management:** Actively label, respond to, and close out stale bug reports.
-- **Community Guidelines:** Add a clear `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.";
+        return "Analysis currently unavailable. Please check API configuration.";
     }
 
     public async Task<PdfContentDto?> GeneratePdfContentAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default)
