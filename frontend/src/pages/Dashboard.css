@@ -89,45 +89,25 @@
   flex-shrink: 0;
 }
 
-/* ─── Prominent Score Cards (3 large) ─── */
-.dashboard__cards--prominent {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-  margin-bottom: var(--space-5);
-}
-
-@media (max-width: 800px) {
-  .dashboard__cards--prominent {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* ─── Stat Cards Grid ─── */
 .dashboard__cards {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-8);
-  align-items: center;
+  align-items: stretch;
 }
 
-/* Middle card spans 2 rows for height */
-.dashboard__cards .stat-card:nth-child(2) {
-  grid-row: span 2;
-  height: 100%;
+/* Specific layout for the score summary row */
+.dashboard__cards--prominent {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: var(--space-5);
 }
 
-@media (max-width: 900px) {
-  .dashboard__cards {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    grid-template-rows: auto;
-  }
-
-  .dashboard__cards .stat-card:nth-child(2) {
-    grid-row: span 1;
-    height: auto;
+@media (max-width: 1000px) {
+  .dashboard__cards--prominent {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 
