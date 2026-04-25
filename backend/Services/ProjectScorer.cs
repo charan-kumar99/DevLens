@@ -13,10 +13,7 @@ public class ProjectScorer : IProjectScorer
     {
         double score = 0;
 
-
         score += (result.ReadmeScore?.Total ?? 0) * 0.3;
-
-
 
         if (DateTime.TryParse(result.LastCommit, out var lastDate))
         {
@@ -25,8 +22,6 @@ public class ProjectScorer : IProjectScorer
             else if (diff < 90) score += 15;
             else if (diff < 180) score += 5;
         }
-
-
 
         var closed = result.IssueStats?.Closed ?? 0;
         var open = result.IssueStats?.Open ?? 0;
@@ -40,8 +35,6 @@ public class ProjectScorer : IProjectScorer
             if (avgDays < 7) score += 10;
             else if (avgDays < 30) score += 5;
         }
-
-
 
         if (result.Stars > 1000) score += 10;
         else if (result.Stars > 100) score += 5;

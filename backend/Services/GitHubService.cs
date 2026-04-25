@@ -145,14 +145,11 @@ public class GitHubService : IGitHubService
                     {
                         var date = dt.Date;
                         var message = commit.TryGetProperty("message", out var msg) ? msg.GetString() ?? "" : "";
-                        
-
                         var firstLine = message.Split('\n')[0].Trim();
                         if (string.IsNullOrEmpty(firstLine)) firstLine = "No message";
                         
                         if (!commitsByDate.ContainsKey(date))
                             commitsByDate[date] = new List<string>();
-                        
 
                         if (commitsByDate[date].Count < 5)
                             commitsByDate[date].Add(firstLine);

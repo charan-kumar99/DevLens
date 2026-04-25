@@ -27,7 +27,6 @@ public class GeminiService : IGeminiService
     {
         _http = http;
         _apiKey = config["GEMINI_API_KEY"] ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-        Console.WriteLine($"[GeminiService] Loaded API Key: {(_apiKey?.Length > 10 ? _apiKey[..10] + "..." : "EMPTY")}");
     }
 
     public async Task<string?> GetSummaryAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default)
@@ -612,9 +611,8 @@ Output ONLY the JSON:";
                 {
                     var err = await response.Content.ReadAsStringAsync(ct);
                     var statusCode = (int)response.StatusCode;
-                    try {
-                        System.IO.File.AppendAllText("backend.log", $"\n[Gemini Error] Model: {model}, Status: {statusCode}, Error: {err}\n");
-                    } catch {}
+                    // Log to console if needed for debug
+                    // Console.WriteLine($"[Gemini Error] Model: {model}, Status: {statusCode}, Error: {err}");
                     continue;
                 }
 

@@ -119,7 +119,6 @@ dotnet run
 - If you get "GITHUB_TOKEN not found", make sure your `.env` file is in the `backend` folder
 - If you get "GEMINI_API_KEY not found", verify your Gemini API key is correct
 - If port 5000 is in use, the app will automatically try 5001, 5002, etc.
-- Check `backend/out.log` for detailed error messages (if logging is enabled)
 
 ### 3. Frontend Setup
 
@@ -161,44 +160,25 @@ Open your browser and navigate to `http://localhost:5173`
 - **"Rate limit exceeded"**: You've hit GitHub's API limit - wait an hour or add a token
 - **CORS errors**: Make sure backend is running and frontend is connecting to the correct URL
 
-## 📁 Project Structure
+## 📁 Project Architecture
 
-```
-devlens/
-├── backend/                    # .NET Web API
-│   ├── Controllers/           # API endpoints
-│   │   ├── AnalyzeController.cs
-│   │   ├── DiscoverController.cs
-│   │   └── SupportController.cs
-│   ├── Services/              # Business logic
-│   │   ├── GeminiService.cs   # AI integration
-│   │   ├── GitHubService.cs   # GitHub API client
-│   │   ├── ProjectScorer.cs   # Quality scoring
-│   │   └── ReadmeScorer.cs    # README evaluation
-│   ├── Models/                # Data models & DTOs
-│   ├── Data/                  # Database context
-│   ├── Utils/                 # Utility classes
-│   └── Program.cs             # Application entry point
-│
-├── frontend/                   # React SPA
-│   ├── src/
-│   │   ├── pages/             # Route components
-│   │   │   ├── Home.jsx       # Landing page
-│   │   │   ├── Dashboard.jsx  # Analysis results
-│   │   │   ├── Compare.jsx    # Repository comparison
-│   │   │   └── Discover.jsx   # Trending repos
-│   │   ├── components/        # Reusable UI components
-│   │   ├── utils/             # Helper functions
-│   │   │   ├── api.js         # API client
-│   │   │   ├── formatters.js  # Data formatting
-│   │   │   ├── markdown.js    # Markdown rendering
-│   │   │   └── pdfExport.js   # PDF generation
-│   │   ├── App.jsx            # Root component
-│   │   └── main.jsx           # Application entry
-│   └── public/                # Static assets
-│
-└── README.md                   # This file
-```
+The project is split into two main layers to ensure clean separation of concerns and scalability:
+
+### [Backend](file:///c:/Projects/DevLens/backend) (.NET 8 Web API)
+- **Controllers**: RESTful endpoints for analysis, discovery, and support.
+- **Services**: Orchestrates GitHub data fetching, Gemini AI prompting, and repository quality scoring.
+- **Data**: Entity Framework Core with SQLite for high-performance result caching.
+- **Middleware**: Built-in rate limiting and secure CORS configuration.
+
+### [Frontend](file:///c:/Projects/DevLens/frontend) (React SPA)
+- **Vite & React 18**: High-performance rendering and ultra-fast development cycle.
+- **Framer Motion**: State-of-the-art cinematic animations and scroll-triggered effects.
+- **Recharts & D3**: Advanced data visualizations for commit frequency and language distribution.
+- **Custom CSS**: Premium "Neural Obsidian" design system with glassmorphism and atmospheric shaders.
+
+---
+[README.md](file:///c:/Projects/DevLens/README.md) is the primary source of truth for the entire DevLens project.
+
 
 ## 🔌 API Endpoints
 
