@@ -93,10 +93,16 @@
 /* ─── Stat Cards Grid ─── */
 .dashboard__cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
   align-items: stretch;
+}
+
+/* Ensure all cards have the same base styling */
+.dashboard__cards .stat-card {
+  height: 100%;
+  min-height: 120px;
 }
 
 /* Specific layout for the score summary row */
@@ -407,9 +413,17 @@
 }
 
 @media (max-width: 640px) {
+@media (max-width: 900px) {
   .dashboard__cards {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+@media (max-width: 600px) {
+  .dashboard__cards {
+    grid-template-columns: 1fr;
+  }
+}
 
   .dashboard__heading {
     font-size: 1.25rem;
