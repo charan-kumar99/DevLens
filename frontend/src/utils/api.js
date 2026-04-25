@@ -101,11 +101,12 @@ export async function askAI(repoUrl, query) {
 /**
  * Asks AI support questions about the platform
  */
-export async function askSupport(question, history = []) {
+export async function askSupport(question, history = [], model = null) {
   return request('/api/support/ask', {
     method: 'POST',
     body: JSON.stringify({
       question,
+      model,
       history: history.map((m) => ({ role: m.type, content: m.text })),
     }),
   }).then((r) => r.answer);

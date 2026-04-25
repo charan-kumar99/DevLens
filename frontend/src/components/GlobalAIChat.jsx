@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { askSupport } from '../utils/api';
 import ReactMarkdown from 'react-markdown';
+import { 
+  Plus, Lightbulb, Check, Sparkles, Zap, Brain, 
+  ChevronDown, SendHorizontal, Trash2
+} from 'lucide-react';
 import './GlobalAIChat.css';
 
 const ALL_QUESTIONS = [
@@ -194,42 +198,57 @@ export default function GlobalAIChat() {
             </div>
           )}
 
-          {/* Input area */}
-          <form className="global-ai-input-form" onSubmit={handleSubmit}>
-            <input
-              ref={inputRef}
-              id="ai-support-input"
-              type="text"
-              className="global-ai-question"
-              placeholder="Ask anything about DevLens…"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={loading}
-              autoComplete="off"
-            />
-            <div className="global-ai-input-actions">
-              {messages.length > 1 && (
-                <button
-                  type="button"
-                  id="ai-support-new-chat"
-                  className="global-ai-clear-btn"
-                  onClick={handleNewChat}
-                  title="Clear conversation"
-                >
-                  🗑️
-                </button>
-              )}
-              <button
-                type="submit"
-                id="ai-support-send"
-                className="global-ai-send"
-                disabled={loading || !input.trim()}
-                title="Send"
-              >
-                {loading ? '…' : '↑'}
-              </button>
+          {/* Bolt Style Input area */}
+          <div className="global-ai-bolt-container">
+            <div className="global-ai-bolt-wrapper">
+              <form className="global-ai-bolt-form" onSubmit={handleSubmit}>
+                <textarea
+                  ref={inputRef}
+                  id="ai-support-input"
+                  className="global-ai-bolt-input"
+                  placeholder="Ask anything about DevLens…"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit(e);
+                    }
+                  }}
+                  disabled={loading}
+                />
+                
+                <div className="global-ai-bolt-footer">
+                  <div className="flex-1" />
+
+                  <div className="global-ai-bolt-right">
+                    {messages.length > 1 && (
+                      <button
+                        type="button"
+                        className="global-ai-bolt-icon-btn"
+                        onClick={handleNewChat}
+                        title="Clear conversation"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    )}
+                    <button
+                      type="submit"
+                      className="global-ai-bolt-send"
+                      disabled={loading || !input.trim()}
+                      title="Send"
+                    >
+                      {loading ? (
+                        <Sparkles className="size-4 animate-pulse" />
+                      ) : (
+                        <SendHorizontal className="size-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       )}
     </>

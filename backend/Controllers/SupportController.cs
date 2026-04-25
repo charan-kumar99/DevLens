@@ -23,7 +23,7 @@ public class SupportController : ControllerBase
 
         try
         {
-            var answer = await _gemini.GetSupportAnswerAsync(request.Question.Trim(), request.History ?? new List<ChatMessage>(), ct);
+            var answer = await _gemini.GetSupportAnswerAsync(request.Question.Trim(), request.History ?? new List<ChatMessage>(), ct, request.Model);
             return Ok(new { answer });
         }
         catch (Exception ex)
@@ -36,5 +36,6 @@ public class SupportController : ControllerBase
 public class AskSupportRequest
 {
     public string Question { get; set; } = string.Empty;
+    public string? Model { get; set; }
     public List<ChatMessage>? History { get; set; }
 }

@@ -4,24 +4,27 @@
 
 /* ─── Layout Shell ─── */
 .dashboard {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 1fr auto;
   min-height: 100vh;
   background: var(--bg-base);
   animation: page-fade-in 0.4s both;
 }
 
 .dashboard > .footer {
-  margin-left: 240px;
-  width: auto;
+  grid-column: 1 / -1;
+  margin-left: 0;
+  width: 100%;
 }
 
 /* ─── Main Content ─── */
 .dashboard__main {
-  flex: 1;
-  margin-left: 240px;
+  grid-column: 2 / 3;
+  margin-left: 0;
   padding: var(--space-8);
-  max-width: calc(100vw - 240px);
+  max-width: 100%;
+  min-width: 0; /* Prevents grid blowout */
   min-height: 100vh;
 }
 
@@ -397,16 +400,29 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 200px 1fr;
+  }
+
   .dashboard__main {
-    margin-left: 0;
     max-width: 100%;
     padding: var(--space-5);
     padding-bottom: var(--space-8);
   }
   
   .dashboard > .footer {
-    margin-left: 0;
     padding-bottom: 80px; /* space for mobile nav */
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .dashboard__main {
+    grid-column: 1 / -1;
   }
 }
 

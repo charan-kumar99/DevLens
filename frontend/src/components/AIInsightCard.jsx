@@ -29,7 +29,9 @@ export default function AIInsightCard({ owner, repo, summary, onUpdate }) {
 
       <div className="ai-insight__content">
         {summary ? (
-          <ReactMarkdown className="ai-insight__markdown">{summary}</ReactMarkdown>
+          <div className="ai-insight__markdown">
+            <ReactMarkdown>{summary}</ReactMarkdown>
+          </div>
         ) : (
           <p className="ai-insight__empty">
             No summary available yet. Click Regenerate to generate an AI analysis.

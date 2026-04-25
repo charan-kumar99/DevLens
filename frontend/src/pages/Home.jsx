@@ -19,32 +19,32 @@ export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const scrollContainerRef = useRef(null);
-  const thumb1Ref = useRef(null);
+  const thumb2Ref = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
     offset: ['start start', 'end end']
   });
 
-  // ── Motion values for thumb1 offset ──
-  const thumb1TargetX = useMotionValue(0);
-  const thumb1TargetY = useMotionValue(0);
+  // ── Motion values for thumb2 offset ──
+  const thumb2TargetX = useMotionValue(0);
+  const thumb2TargetY = useMotionValue(0);
 
   useEffect(() => {
     const measure = () => {
-      if (!thumb1Ref.current) return;
-      const rect = thumb1Ref.current.getBoundingClientRect();
+      if (!thumb2Ref.current) return;
+      const rect = thumb2Ref.current.getBoundingClientRect();
       const cardCenterX = rect.left + rect.width / 2;
       const cardCenterY = rect.top  + rect.height / 2;
       const vwCenter = window.innerWidth  / 2;
       const vhCenter = window.innerHeight / 2;
-      thumb1TargetX.set(vwCenter - cardCenterX);
-      thumb1TargetY.set(vhCenter - cardCenterY);
+      thumb2TargetX.set(vwCenter - cardCenterX);
+      thumb2TargetY.set(vhCenter - cardCenterY);
     };
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
-  }, [thumb1TargetX, thumb1TargetY]);
+  }, [thumb2TargetX, thumb2TargetY]);
 
   // ══════════════════════════════════════════════════════
   // HERO — the ENTIRE section fades from 0% to 50% scroll.
@@ -55,22 +55,22 @@ export default function Home() {
   const heroSectionDisplay = useTransform(scrollYProgress, v => v > 0.5 ? 'none' : 'flex');
   const heroTextY          = useTransform(scrollYProgress, [0, 0.5], [0, -40]);
 
-  // Thumb 1 zoom (stays visible, doesn't fade)
-  const thumb1ScaleX  = useTransform(scrollYProgress, [0, 0.5], [1, 2.71]);
-  const thumb1ScaleY  = useTransform(scrollYProgress, [0, 0.5], [1, 5.14]);
-  const thumb1Opacity = useTransform(scrollYProgress, [0, 0.5], [1, 1]); // stays at 1
-  const thumb1Progress = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const thumb1X = useTransform(
-    [thumb1Progress, thumb1TargetX],
+  // Thumb 2 zoom (stays visible, doesn't fade)
+  const thumb2ScaleX  = useTransform(scrollYProgress, [0, 0.5], [1, 2.71]);
+  const thumb2ScaleY  = useTransform(scrollYProgress, [0, 0.5], [1, 5.14]);
+  const thumb2ZoomOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 1]); // stays at 1
+  const thumb2Progress = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const thumb2X = useTransform(
+    [thumb2Progress, thumb2TargetX],
     ([p, tx]) => p * tx
   );
-  const thumb1Y = useTransform(
-    [thumb1Progress, thumb1TargetY],
+  const thumb2Y = useTransform(
+    [thumb2Progress, thumb2TargetY],
     ([p, ty]) => p * ty
   );
 
-  // Thumbs 2 & 3 fade from 0% to 50%
-  const thumb2Opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  // Thumbs 1 & 3 fade from 0% to 50%
+  const thumb1Opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const thumb3Opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   // ══════════════════════════════════════════════════════
@@ -262,22 +262,25 @@ export default function Home() {
                 {/* ── 3 thumbnail cards ── */}
                 <div className="home__hero-thumbs">
                   <motion.div
-                    ref={thumb1Ref}
-                    className="home__card-thumb home__card-thumb--hero"
-                    style={{
-                      opacity: thumb1Opacity,
-                      scaleX: thumb1ScaleX, scaleY: thumb1ScaleY,
-                      x: thumb1X, y: thumb1Y,
-                      transformOrigin: 'center center',
-                      zIndex: 20, position: 'relative',
-                    }}
+                    className="home__card-thumb"
+                    style={{ opacity: thumb1Opacity }}
                   >
                     <span className="home__card-thumb-icon">🔬</span>
                     <span className="home__card-thumb-num">01</span>
                     <span className="home__card-thumb-title">AI Code Analysis</span>
                   </motion.div>
 
-                  <motion.div className="home__card-thumb" style={{ opacity: thumb2Opacity }}>
+                  <motion.div
+                    ref={thumb2Ref}
+                    className="home__card-thumb home__card-thumb--hero"
+                    style={{
+                      opacity: thumb2ZoomOpacity,
+                      scaleX: thumb2ScaleX, scaleY: thumb2ScaleY,
+                      x: thumb2X, y: thumb2Y,
+                      transformOrigin: 'center center',
+                      zIndex: 20, position: 'relative',
+                    }}
+                  >
                     <span className="home__card-thumb-icon">⚡</span>
                     <span className="home__card-thumb-num">02</span>
                     <span className="home__card-thumb-title">Instant Insights</span>

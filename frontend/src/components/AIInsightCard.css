@@ -115,6 +115,10 @@
   margin-bottom: var(--space-2);
 }
 
+.ai-insight__markdown li p {
+  margin-bottom: 0;
+}
+
 .ai-insight__empty {
   color: var(--text-muted);
   font-style: italic;

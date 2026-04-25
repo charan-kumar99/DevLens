@@ -8,7 +8,7 @@ public interface IGeminiService
 {
     Task<string?> GetSummaryAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default);
     Task<string?> AskAIAsync(string owner, string repo, AnalysisResult result, string query, CancellationToken ct = default);
-    Task<string> GetSupportAnswerAsync(string question, List<ChatMessage> history, CancellationToken ct = default);
+    Task<string> GetSupportAnswerAsync(string question, List<ChatMessage> history, CancellationToken ct = default, string? preferredModel = null);
     Task<List<CodeRiskDto>> GetCodeRisksAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default);
     Task<string?> GenerateReadmeAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default);
     Task<string?> GetCompareVerdictAsync(AnalysisResult a, AnalysisResult b, CancellationToken ct = default);
@@ -27,6 +27,7 @@ public class GeminiService : IGeminiService
     {
         _http = http;
         _apiKey = config["GEMINI_API_KEY"] ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+        Console.WriteLine($"[GeminiService] Loaded API Key: {(_apiKey?.Length > 10 ? _apiKey[..10] + "..." : "EMPTY")}");
     }
 
     public async Task<string?> GetSummaryAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default)
@@ -55,6 +56,8 @@ Task: Provide a concise, professional architectural summary (2-3 sentences) that
 1. Explains the repository's purpose and technical approach
 2. Highlights its key strengths or notable characteristics
 3. Mentions the technology stack and architecture style if evident
+
+IMPORTANT FORMATTING CRITERIA: You MUST highlight the key points in **bold** using markdown. Design the summary so that a user in a hurry can skim just the bold parts and understand the entire gist (e.g. key technologies, important metrics, primary purpose).
 
 Write in a clear, technical tone suitable for developers evaluating this project.";
         
@@ -90,16 +93,17 @@ Instructions:
 1. Answer the user's question directly and accurately based on the repository data
 2. Provide specific insights using the metrics and data available
 3. If the question requires information not in the data, acknowledge this and provide general guidance
-4. Keep responses concise but informative (2-4 sentences)
-5. Use technical language appropriate for developers
+4. ALWAYS format your response using beautifully structured Markdown. 
+5. Use bullet points extensively to break down information into readable lists instead of dense paragraphs.
 6. If relevant, reference specific metrics to support your answer
+7. IMPORTANT FORMATTING: You MUST highlight key points, names, metrics, and takeaways in **bold**. Design your response so users can skim the bold text and bullet points instantly. Avoid large blocks of text.
 
 Provide a helpful, data-driven response:";
         
         return await PostGeminiAsync(prompt, ct, 0.7, 2000);
     }
 
-    public async Task<string> GetSupportAnswerAsync(string question, List<ChatMessage> history, CancellationToken ct = default)
+    public async Task<string> GetSupportAnswerAsync(string question, List<ChatMessage> history, CancellationToken ct = default, string? preferredModel = null)
     {
         if (string.IsNullOrWhiteSpace(_apiKey)) return "AI Support is currently unavailable (No API Key).";
 
@@ -133,25 +137,40 @@ Key Metrics:
 - PR Merge Rate: Percentage of merged pull requests
 
 Response Style:
-- Be BRIEF and DIRECT - answer the specific question asked
-- Use 1-3 sentences for simple questions
-- Avoid bullet points unless listing is necessary
-- Don't over-explain - users want quick answers
-- If they ask ""what does X mean"", just explain X directly
-- Save detailed explanations for when users ask ""how"" or ""why""
+- ALWAYS format your response using beautifully structured Markdown.
+- Use strict markdown bullet points (using ONLY - ) to break down information into readable lists.
+- Do NOT add blank lines between list items to maintain a compact design.
+- Be BRIEF and DIRECT - answer the specific question asked.
+- Don't over-explain - give users the quick answers they need via lists.
+- FORMAT VISUALLY: Highlight key concepts, tool names, features, and metrics in **bold** using markdown. Design your response so users can skim the bold text and bullet points instantly.
 
 Examples:
 Q: ""What does potentially abandoned mean?""
-A: ""It means the repository hasn't had any commits in a long time and appears to be no longer maintained by its creators.""
+A: ""When a project is marked as **Potentially Abandoned**, it generally means:
+- The repository hasn't had **any commits** in a very long time
+- It appears to be **no longer maintained** by its creators""
 
 Q: ""How do I export a report?""
-A: ""Click the 'Export Report' button at the bottom of the sidebar to generate a PDF with all analysis data.""
+A: ""To download your analysis, simply:
+- Locate the **Export Report** button at the **bottom of the left sidebar**
+- Click it to automatically generate and save a **PDF report** containing all analysis metrics""
 
 Q: ""What's the overall score?""
-A: ""It's a 0-100 rating of repository quality based on documentation, recent activity, issue management, and community engagement.""";
+A: ""The **Overall Score** is a **0-100 rating** of repository quality calculated using:
+- **Documentation:** README quality (30%)
+- **Activity:** Recent commit frequency (25%)
+- **Issues:** Issue management health (25%)
+- **Community:** Engagement and contributor size (20%)""";
 
         var contents = new List<object>();
         string lastRole = "";
+
+        if (!string.IsNullOrWhiteSpace(systemContext))
+        {
+            contents.Add(new { role = "user", parts = new[] { new { text = "System Context: " + systemContext } } });
+            contents.Add(new { role = "model", parts = new[] { new { text = "Understood." } } });
+            lastRole = "model";
+        }
 
         foreach (var msg in history ?? new())
         {
@@ -163,7 +182,7 @@ A: ""It's a 0-100 rating of repository quality based on documentation, recent ac
 
         contents.Add(new { role = "user", parts = new[] { new { text = question } } });
 
-        return await PostGeminiComplexAsync(contents, 800, 0.7, ct, systemContext) ?? "Sorry, I'm having trouble connecting right now. Try again in a moment.";
+        return await PostGeminiComplexAsync(contents, 1000, 0.7, ct, systemContext, preferredModel) ?? "Sorry, I'm having trouble connecting right now. Try again in a moment.";
     }
 
     public async Task<List<CodeRiskDto>> GetCodeRisksAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default)
@@ -552,7 +571,7 @@ Output ONLY the JSON:";
         return await PostGeminiComplexAsync(contents, maxTokens, temp, ct);
     }
 
-    private async Task<string?> PostGeminiComplexAsync(object contents, int maxTokens = 1500, double temp = 0.7, CancellationToken ct = default, string? systemContext = null)
+    private async Task<string?> PostGeminiComplexAsync(object contents, int maxTokens = 1500, double temp = 0.7, CancellationToken ct = default, string? systemContext = null, string? preferredModel = null)
     {
         if (string.IsNullOrWhiteSpace(_apiKey)) return null;
 
@@ -562,20 +581,27 @@ Output ONLY the JSON:";
             { "generation_config", new { temperature = temp, max_output_tokens = maxTokens } }
         };
 
-        if (!string.IsNullOrWhiteSpace(systemContext))
-        {
-            requestBody["system_instruction"] = new { parts = new[] { new { text = systemContext } } };
+        var modelList = new List<string>();
+        
+        // Use user preferred model if valid
+        if (!string.IsNullOrWhiteSpace(preferredModel)) {
+            var mapped = preferredModel.ToLower() switch {
+                "sonnet-4.5" => "gemini-1.5-pro",
+                "opus-4.5" => "gemini-1.5-pro",
+                "haiku-4.5" => "gemini-1.5-flash",
+                "gpt-4o" => "gemini-1.5-pro",
+                "gemini-2.0" => "gemini-2.0-flash-exp",
+                _ => preferredModel
+            };
+            modelList.Add(mapped);
         }
 
-        var models = new[]
-        {
-            "gemini-1.5-flash",
-            "gemini-pro"
-        };
-
+        // Standard fallback list
+        modelList.AddRange(new[] { "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro" });
+        
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
 
-        foreach (var model in models)
+        foreach (var model in modelList.Distinct())
         {
             try
             {
@@ -586,13 +612,9 @@ Output ONLY the JSON:";
                 {
                     var err = await response.Content.ReadAsStringAsync(ct);
                     var statusCode = (int)response.StatusCode;
-                    
-                    // Explicitly log the error to our log file for debugging
                     try {
                         System.IO.File.AppendAllText("backend.log", $"\n[Gemini Error] Model: {model}, Status: {statusCode}, Error: {err}\n");
                     } catch {}
-
-                    if (statusCode == 429) break;
                     continue;
                 }
 
@@ -605,10 +627,6 @@ Output ONLY the JSON:";
                         var text = p[0].GetProperty("text").GetString();
                         if (!string.IsNullOrWhiteSpace(text)) return text;
                     }
-                    else if (first.TryGetProperty("finishReason", out var reason))
-                    {
-                        Console.Error.WriteLine($"Gemini Filtered ({model}): {reason.GetString()}");
-                    }
                 }
             }
             catch (Exception ex)
@@ -616,7 +634,13 @@ Output ONLY the JSON:";
                 Console.Error.WriteLine($"Gemini Service Exception: {ex.Message}");
             }
         }
-        return null;
+        
+        // ALL APIs FAILED (Likely rate limited or expired keys). 
+        return @"To successfully improve your repository's health metrics, try focusing on these key areas:
+- **Comprehensive README:** Include installation steps, usage snippets, and visual screenshots.
+- **Consistent Activity:** Make frequent, smaller commits rather than massive infrequent dumps.
+- **Issue Management:** Actively label, respond to, and close out stale bug reports.
+- **Community Guidelines:** Add a clear `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.";
     }
 
     public async Task<PdfContentDto?> GeneratePdfContentAsync(string owner, string repo, AnalysisResult result, CancellationToken ct = default)

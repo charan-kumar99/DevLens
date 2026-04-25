@@ -92,12 +92,14 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      <Sidebar
-        current={section}
-        onNavigate={setSection}
-        repoLabel={repoLabel}
-        result={result}
-      />
+      <div className="dashboard__sidebar-wrapper">
+        <Sidebar
+          current={section}
+          onNavigate={setSection}
+          repoLabel={repoLabel}
+          result={result}
+        />
+      </div>
       <main className="dashboard__main">
         {section === 'overview' && (
           <section className="dashboard__section" aria-labelledby="overview-title">

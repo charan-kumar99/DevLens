@@ -1,0 +1,285 @@
+/* ============================================================
+   Scroll Animation Section - Multi-Phase Card Animation
+   ============================================================ */
+
+.scroll-animation-section {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #0f1629 0%, #0a0f1e 100%);
+  overflow: hidden;
+}
+
+.scroll-animation-section__container {
+  position: relative;
+  width: 100%;
+  min-height: 300vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Fade overlay for background content ── */
+.scroll-animation-section__fade-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+
+/* ── Sticky wrapper for cards ── */
+.scroll-animation-section__sticky-wrapper {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+/* ── Cards grid layout ── */
+.scroll-animation-section__cards-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 40px;
+}
+
+/* ── Individual card styling ── */
+.scroll-animation-section__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(255, 255, 255, 0.04),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  will-change: transform, opacity, scale;
+  transition: box-shadow 0.3s ease;
+}
+
+.scroll-animation-section__card:hover {
+  box-shadow: 0 20px 80px rgba(79, 158, 255, 0.3),
+              0 0 0 1px rgba(99, 102, 241, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Card center - the main featured card */
+.scroll-animation-section__card--center {
+  width: 100%;
+  max-width: 420px;
+  min-height: 480px;
+  padding: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(139, 92, 246, 0.15) 100%
+  );
+  flex-shrink: 0;
+}
+
+/* Card left - side card */
+.scroll-animation-section__card--left {
+  width: 280px;
+  min-height: 320px;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.12) 0%,
+    rgba(34, 197, 94, 0.06) 100%
+  );
+  flex-shrink: 0;
+}
+
+/* Card right - side card */
+.scroll-animation-section__card--right {
+  width: 280px;
+  min-height: 320px;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.12) 0%,
+    rgba(168, 85, 247, 0.06) 100%
+  );
+  flex-shrink: 0;
+}
+
+/* ── Card inner structure ── */
+.scroll-animation-section__card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+}
+
+.scroll-animation-section__card-inner--with-text-animation {
+  justify-content: space-between;
+}
+
+/* ── Card header (icon + title) ── */
+.scroll-animation-section__card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.scroll-animation-section__card-icon {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Card title ── */
+.scroll-animation-section__card-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.scroll-animation-section__card--left .scroll-animation-section__card-title,
+.scroll-animation-section__card--right .scroll-animation-section__card-title {
+  font-size: 18px;
+}
+
+/* ── Card subtitle ── */
+.scroll-animation-section__card-subtitle {
+  margin: 0 0 12px 0;
+  color: #a5b4fc;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ── Card description ── */
+.scroll-animation-section__card-desc {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Text wrapper with overflow hidden for animation ── */
+.scroll-animation-section__text-wrapper {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.scroll-animation-section__text-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  will-change: transform;
+}
+
+/* ── Spacer for scrolling ── */
+.scroll-animation-section__spacer {
+  flex: 1;
+  min-height: 200vh;
+}
+
+/* ── Responsive design ── */
+@media (max-width: 1024px) {
+  .scroll-animation-section__cards-grid {
+    gap: 16px;
+    padding: 0 24px;
+  }
+
+  .scroll-animation-section__card--center {
+    max-width: 360px;
+    min-height: 420px;
+    padding: 24px;
+  }
+
+  .scroll-animation-section__card--left,
+  .scroll-animation-section__card--right {
+    width: 240px;
+    min-height: 280px;
+    padding: 16px;
+  }
+
+  .scroll-animation-section__card-title {
+    font-size: 18px;
+  }
+
+  .scroll-animation-section__card--left .scroll-animation-section__card-title,
+  .scroll-animation-section__card--right .scroll-animation-section__card-title {
+    font-size: 16px;
+  }
+
+  .scroll-animation-section__card-desc {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-animation-section__container {
+    min-height: 400vh;
+  }
+
+  .scroll-animation-section__cards-grid {
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .scroll-animation-section__card--center {
+    max-width: 90vw;
+    min-height: 380px;
+    padding: 20px;
+  }
+
+  .scroll-animation-section__card--left,
+  .scroll-animation-section__card--right {
+    width: 70vw;
+    min-height: 240px;
+    padding: 14px;
+    display: none; /* Hide on mobile during animation */
+  }
+
+  .scroll-animation-section__card-title {
+    font-size: 16px;
+  }
+
+  .scroll-animation-section__card-desc {
+    font-size: 12px;
+  }
+
+  .scroll-animation-section__card-icon {
+    font-size: 24px;
+  }
+}
+
+/* ── Animation performance ── */
+@supports (will-change: transform) {
+  .scroll-animation-section__card {
+    will-change: transform, opacity, scale;
+  }
+}
+
+/* ── Smooth scrolling ── */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
